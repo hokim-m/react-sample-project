@@ -29,6 +29,7 @@
     ]
   },
   "devDependencies": {
+    "react-router": "^5.1.2",
     "redux": "^4.0.4"
   }
 }
