@@ -3,10 +3,12 @@ import React from 'react';
 const CompanyCardView = (props) => {
         let {data} = props;
 
-        return <div>
-                <h3>{data.name}</h3>
-                <p>LEI: {data.lei}</p>
-                <p>Ticker: {data.ticker}</p>
+        return <div className="panel">
+                <div className="panel-body">
+                        <h3 className="panel-title">{data.name}</h3>
+                        <p>Cik: {data.cik}</p>
+                        <p>Ticker: {data.ticker}</p>
+                </div>
         </div>;
 };
 
