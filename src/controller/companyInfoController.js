@@ -7,7 +7,8 @@ class CompanyInfoController extends React.Component {
                 super();
                 this.state = {
                         data: null,
-                        loading: true
+                        loading: true,
+                        toggleLong: false
                 };
         }
 
@@ -22,6 +23,25 @@ class CompanyInfoController extends React.Component {
                 });
         }
 
+        companyDescription() {
+                const data   = this.state.data;
+                const isLong = this.state.toggleLong;
+
+                const onClick = () => {
+                        this.setState(prevState => {
+                                return {
+                                        toggleLong: !prevState.toggleLong
+                                };
+                        });
+                };
+
+                let key       = isLong ? 'long_description' : 'short_description';
+                let btn_title = isLong ? 'Less' : 'Read More';
+
+                return <p>Description: {data[key]} <a onClick={() => onClick()}>{btn_title}</a></p>;
+
+        }
+
         render() {
                 const {data, loading} = this.state;
                 if (loading) {
@@ -32,8 +52,13 @@ class CompanyInfoController extends React.Component {
                         <div className="panel">
                                 <div className="panel-body">
                                         <h3 className="panel-title">{data.name}</h3>
+                                        <p>Legal Name: {data.legal_name}</p>
+                                        <p>CEO: {data.ceo}</p>
+                                        <p>Entity Status: {data.entity_status}</p>
+                                        <p>Sector: {data.sector}</p>
                                         <p>Cik: {data.cik}</p>
                                         <p>Ticker: {data.ticker}</p>
+                                        {this.companyDescription()}
                                 </div>
                         </div>
 
