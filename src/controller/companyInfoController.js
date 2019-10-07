@@ -17,10 +17,19 @@ class CompanyInfoController extends React.Component {
                 axios({url: `/companies/${companyId}`}).then(result => {
                         console.log(result);
                         this.setState({
-                                data: result,
-                                loading: false
+                                data: result
                         });
+                }).finally(()=> {
+                        this.setState({
+                                loading: false
+                        })
                 });
+        }
+
+        getNoDataBlock() {
+                return <div>
+                        Company with current Ticker not found
+                </div>
         }
 
         companyDescription() {
@@ -46,6 +55,11 @@ class CompanyInfoController extends React.Component {
                 const {data, loading} = this.state;
                 if (loading) {
                         return <div></div>;
+                }
+                if (!data) {
+                        return <div>
+                                {this.getNoDataBlock()}
+                        </div>
                 }
                 return <div>
 
