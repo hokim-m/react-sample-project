@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const HeaderView = () => {
         return <nav className="navbar navbar-default navbar-fixed-top">
@@ -10,9 +11,10 @@ const HeaderView = () => {
                         </div>
                         <ul className="nav navbar-nav">
                                 <li className="active">
-                                        <a href="#">Main</a></li>
+                                        <Link to="/">Main</Link>
+                                </li>
                                 <li>
-                                        <a href="all">All Companies</a>
+                                        <Link to="/all">All Companies</Link>
                                 </li>
                         </ul>
                 </div>
