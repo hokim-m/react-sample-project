@@ -11,7 +11,7 @@ function companies(state = [], action) {
     }
 }
 
-function comments(state, action) {
+function comments(state = [], action) {
     switch (action.type) {
         case SET_COMMENTS:
             return action.data;
