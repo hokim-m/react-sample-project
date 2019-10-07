@@ -1,16 +1,27 @@
 import React from 'react';
 import './App.css';
 import MainController from './controller/mainController';
+import CompaniesController from './controller/companiesController';
 import HeaderView from './view/headerView';
+import {Route, withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 function App() {
         return <div>
                 <HeaderView/>
                 <div className="App-container">
-                        <MainController/>
+                        <Route exact path="/" component={MainController}/>
+                        <Route path="/all" component={CompaniesController}/>
                 </div>
 
         </div>;
 }
 
-export default App;
+const mapStateToProps = state => {
+        return {
+                companies: state.companies,
+                comments: state.comments
+        };
+};
+
+export default withRouter(connect(mapStateToProps, null)(App));
