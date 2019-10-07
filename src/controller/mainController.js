@@ -31,14 +31,19 @@ class MainController extends React.Component {
                         return <div></div>;
                 }
                 let chunks = array_chunks(data, 5);
-                console.log(chunks);
+
+                const onCardClick = (data) => {
+                        this.props.history.push(`/company/${data.ticker}`);
+                };
+
                 return <div>
                         {
                                 chunks.map((array, i) => {
-                                        return <div className="row">
+                                        return <div className="row" key={`row${i}`}>
                                                 {
                                                         array.map((cp, index) => {
                                                                 return <div key={index}
+                                                                            onClick={() => onCardClick(cp)}
                                                                             className={`col-md-2 ${index === 0 && 'col-md-offset-1'}`}>
                                                                         <CompanyCardView data={cp}/>
                                                                 </div>;
