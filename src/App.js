@@ -6,7 +6,10 @@ import HeaderView from './view/headerView';
 function App() {
         return <div>
                 <HeaderView/>
-                <MainController/>
+                <div className="App-container">
+                        <MainController/>
+                </div>
+
         </div>;
 }
 
