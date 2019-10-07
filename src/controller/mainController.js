@@ -2,8 +2,7 @@ import React from 'react';
 import axios from '../model/axios';
 import {setCompaniesList} from '../model/actions';
 import store from '../model/store';
-import {array_chunks} from '../model/helpers';
-import CompanyCardView from '../view/companyCardView';
+import CompaniesGridView from '../view/companiesGridView';
 
 class MainController extends React.Component {
         constructor(props) {
@@ -30,29 +29,14 @@ class MainController extends React.Component {
                 if (loading) {
                         return <div></div>;
                 }
-                let chunks = array_chunks(data, 5);
 
                 const onCardClick = (data) => {
                         this.props.history.push(`/company/${data.ticker}`);
                 };
 
                 return <div>
-                        {
-                                chunks.map((array, i) => {
-                                        return <div className="row" key={`row${i}`}>
-                                                {
-                                                        array.map((cp, index) => {
-                                                                return <div key={index}
-                                                                            onClick={() => onCardClick(cp)}
-                                                                            className={`col-md-2 ${index === 0 && 'col-md-offset-1'}`}>
-                                                                        <CompanyCardView data={cp}/>
-                                                                </div>;
-                                                        })
-                                                }
-                                        </div>;
-                                })
-
-                        }
+                        <CompaniesGridView data={data}
+                                           onClick={onCardClick}/>
                 </div>;
         }
 }
