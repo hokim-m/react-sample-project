@@ -1,14 +1,13 @@
-import {combanineReducers} from 'redux'
+import {combineReducers} from 'redux'
 
 import {ADD_COMMENT, SET_COMMENTS, SET_COMPANIES_LIST} from "./actions";
 
 
 function companies(state = [], action) {
-    switch (action.type) {
-        case SET_COMPANIES_LIST:
-            return action.data;
-        default:
-            return state;
+    if (action.type === SET_COMPANIES_LIST) {
+        return action.data;
+    } else {
+        return state;
     }
 }
 
@@ -24,7 +23,7 @@ function comments(state, action) {
 }
 
 
-const application = combanineReducers({
+const application = combineReducers({
     companies,
     comments
 });
