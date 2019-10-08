@@ -60,14 +60,19 @@ class CompanyInfoController extends React.Component {
                 }
                 const news = this.state.news;
 
+                const onOpenNewsURL = (data) => {
+                        window.location.href = data.url;
+                };
+
                 return <div className="comments-container">
                         <h2 className="panel-title">News</h2>
                         {
                                 news.map((data, index) => {
                                         return <div className="panel">
-                                                <div className="panel-body">
+                                                <div className="panel-body" onClick={() => onOpenNewsURL(data)}>
                                                         <h3 className="panel-title">{data.title}</h3>
                                                         <p>{data.summary}</p>
+                                                        <p>Date: {new Date(data.publication_date).toLocaleString('en')}</p>
                                                 </div>
                                         </div>;
                                 })
