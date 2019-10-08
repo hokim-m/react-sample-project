@@ -1,16 +1,31 @@
 import React from 'react';
 import axios from '../model/axios';
-import {sortArrayWithKey} from '../model/helpers';
+import {debounce, sortArrayWithKey} from '../model/helpers';
 import CompaniesGridView from '../view/companiesGridView';
 
 class CompaniesController extends React.Component {
         constructor(props) {
                 super();
-                this.state = {};
+                this.state    = {};
+                this.fullList = [];
         }
 
-        componentDidMount() {
+        reloadCompaniesList() {
                 axios({url: '/companies'}).then(result => {
+                        console.log(result);
+                        let data = result.companies;
+
+                        let sorted = sortArrayWithKey(data, 'name');
+                        console.log(sorted);
+                        this.fullList = sorted.slice();
+                        this.setState({
+                                data: sorted
+                        });
+                });
+        }
+
+        searchCompany(query) {
+                axios({url: `/companies/search?query=${query}`}).then(result => {
                         console.log(result);
                         let data = result.companies;
 
@@ -22,8 +37,32 @@ class CompaniesController extends React.Component {
                 });
         }
 
+        componentDidMount() {
+                this.reloadCompaniesList();
+        }
+
+
+
         getSearchBar() {
-                return <div></div>;
+                const resetCompaniesList = () => {
+                        this.setState({
+                                data: this.fullList.slice()
+                        });
+                };
+                const onQueryUpdate      = (val) => {
+                        if (!val.length) {
+                                return resetCompaniesList();
+                        }
+                        this.searchCompany(val);
+                };
+                return <div>
+                        <div className="input-group" style={{margin: '2em', width: 'calc(100% - 4em)'}}>
+                                <input type="text"
+                                       className="form-control"
+                                       onChange={(e) => debounce(onQueryUpdate(e.target.value, 500))}
+                                       placeholder="Search "/>
+                        </div>
+                </div>;
         }
 
         getCompaniesListView() {
