@@ -8,28 +8,72 @@ class CompanyInfoController extends React.Component {
                 this.state = {
                         data: null,
                         loading: true,
+                        nLoading: true,
+                        news: [],
                         toggleLong: false
                 };
         }
 
-        componentDidMount() {
+        getCompanyNewsData() {
+                const companyId = this.props.match.params.id;
+                axios({url: `/companies/${companyId}/news`}).then(result => {
+                        console.log(result);
+                        this.setState({
+                                news: result.news.slice()
+                        });
+                }).finally(() => {
+                        this.setState({
+                                nLoading: false
+                        });
+                });
+        }
+
+        getCompanyDetails() {
                 const companyId = this.props.match.params.id;
                 axios({url: `/companies/${companyId}`}).then(result => {
                         console.log(result);
                         this.setState({
                                 data: result
                         });
-                }).finally(()=> {
+                }).finally(() => {
                         this.setState({
                                 loading: false
-                        })
+                        });
                 });
+        }
+
+        componentDidMount() {
+                this.getCompanyDetails();
+                this.getCompanyNewsData();
         }
 
         getNoDataBlock() {
                 return <div>
                         Company with current Ticker not found
-                </div>
+                </div>;
+        }
+
+        drawNewsBlock() {
+                const loading = this.state.nLoading;
+                if (loading) {
+                        return <div>Loading...</div>;
+                }
+                const news = this.state.news;
+
+                return <div className="comments-container">
+                        <h2 className="panel-title">News</h2>
+                        {
+                                news.map((data, index) => {
+                                        return <div className="panel">
+                                                <div className="panel-body">
+                                                        <h3 className="panel-title">{data.title}</h3>
+                                                        <p>{data.summary}</p>
+                                                </div>
+                                        </div>;
+                                })
+                        }
+
+                </div>;
         }
 
         companyDescription() {
@@ -59,21 +103,25 @@ class CompanyInfoController extends React.Component {
                 if (!data) {
                         return <div>
                                 {this.getNoDataBlock()}
-                        </div>
+                        </div>;
                 }
-                return <div>
-
-                        <div className="panel">
-                                <div className="panel-body">
-                                        <h3 className="panel-title">{data.name}</h3>
-                                        <p>Legal Name: {data.legal_name}</p>
-                                        <p>CEO: {data.ceo}</p>
-                                        <p>Entity Status: {data.entity_status}</p>
-                                        <p>Sector: {data.sector}</p>
-                                        <p>Cik: {data.cik}</p>
-                                        <p>Ticker: {data.ticker}</p>
-                                        {this.companyDescription()}
+                return <div className="row">
+                        <div className="col-md-8">
+                                <div className="panel">
+                                        <div className="panel-body">
+                                                <h3 className="panel-title">{data.name}</h3>
+                                                <p>Legal Name: {data.legal_name}</p>
+                                                <p>CEO: {data.ceo}</p>
+                                                <p>Entity Status: {data.entity_status}</p>
+                                                <p>Sector: {data.sector}</p>
+                                                <p>Cik: {data.cik}</p>
+                                                <p>Ticker: {data.ticker}</p>
+                                                {this.companyDescription()}
+                                        </div>
                                 </div>
+                        </div>
+                        <div className="col-md-4">
+                                {this.drawNewsBlock()}
                         </div>
 
                 </div>;
